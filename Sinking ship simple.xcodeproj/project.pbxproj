@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		72AB25A02087C4B9001ACEAE /* MoveShipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AB259F2087C4B9001ACEAE /* MoveShipsViewController.swift */; };
+		72AB25A2208A40C6001ACEAE /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AB25A1208A40C6001ACEAE /* FirstViewController.swift */; };
+		72AB25A6208A4F23001ACEAE /* BoatPositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AB25A5208A4F23001ACEAE /* BoatPositions.swift */; };
 		72FC04142087AA4800EFEA55 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FC04132087AA4800EFEA55 /* AppDelegate.swift */; };
 		72FC04162087AA4800EFEA55 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72FC04152087AA4800EFEA55 /* ViewController.swift */; };
 		72FC04192087AA4800EFEA55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72FC04172087AA4800EFEA55 /* Main.storyboard */; };
@@ -15,6 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		72AB259F2087C4B9001ACEAE /* MoveShipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveShipsViewController.swift; sourceTree = "<group>"; };
+		72AB25A1208A40C6001ACEAE /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		72AB25A5208A4F23001ACEAE /* BoatPositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoatPositions.swift; sourceTree = "<group>"; };
 		72FC04102087AA4800EFEA55 /* Sinking ship simple.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sinking ship simple.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		72FC04132087AA4800EFEA55 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		72FC04152087AA4800EFEA55 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -55,8 +61,11 @@
 			isa = PBXGroup;
 			children = (
 				72FC04132087AA4800EFEA55 /* AppDelegate.swift */,
+				72AB25A5208A4F23001ACEAE /* BoatPositions.swift */,
 				72FC04152087AA4800EFEA55 /* ViewController.swift */,
+				72AB25A1208A40C6001ACEAE /* FirstViewController.swift */,
 				72FC04172087AA4800EFEA55 /* Main.storyboard */,
+				72AB259F2087C4B9001ACEAE /* MoveShipsViewController.swift */,
 				72FC041A2087AA4800EFEA55 /* Assets.xcassets */,
 				72FC041C2087AA4800EFEA55 /* LaunchScreen.storyboard */,
 				72FC041F2087AA4800EFEA55 /* Info.plist */,
@@ -136,8 +145,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72AB25A02087C4B9001ACEAE /* MoveShipsViewController.swift in Sources */,
+				72AB25A6208A4F23001ACEAE /* BoatPositions.swift in Sources */,
 				72FC04162087AA4800EFEA55 /* ViewController.swift in Sources */,
 				72FC04142087AA4800EFEA55 /* AppDelegate.swift in Sources */,
+				72AB25A2208A40C6001ACEAE /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
