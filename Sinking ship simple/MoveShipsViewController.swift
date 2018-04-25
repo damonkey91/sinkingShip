@@ -15,57 +15,57 @@ class MoveShipsViewController: UIViewController {
     var positionArray: [BoatPositions]!
     let defaults = UserDefaults.standard
     var newCord = CGPoint(x: 0, y: 0)
+    var tileWidthAndHeight: CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let data = defaults.data(forKey: "boatsPosition")
-        positionArray = NSKeyedUnarchiver.unarchiveObject(with: data!) as! [BoatPositions]
+
+        positionArray = BoatPositions.getFromUserDefaults()
+        tileWidthAndHeight = battleView.frame.width/10
         createBattlefield()
         createShips()
     }
     
     func createBattlefield() {
-        let widthAndHeight = battleView.frame.width/10
         var y: CGFloat = 0
         var count = 1
         for _ in 1...10 {
             var x: CGFloat = 0
             for _ in 1...10 {
-                let frameSize = CGRect(x: CGFloat(x), y: y, width: widthAndHeight, height: widthAndHeight)
+                let frameSize = CGRect(x: CGFloat(x), y: y, width: tileWidthAndHeight, height: tileWidthAndHeight)
                 let button = UIButton(frame: frameSize)
                 button.backgroundColor = UIColor.blue
                 button.tag = count
                 button.layer.borderWidth = 1
                 button.layer.borderColor = UIColor.white.cgColor
                 battleView.addSubview(button)
-                x += widthAndHeight
+                x += tileWidthAndHeight
                 count += 1
             }
-            y += widthAndHeight
+            y += tileWidthAndHeight
         }
     }
     
     func createShips() {
-        let widthAndHeight = battleView.frame.width/10
-        var y: CGFloat = battleView.frame.height
-        var x: CGFloat = 0
-        for i in 2...6{
-            let frame = CGRect(x: x, y: y-widthAndHeight*CGFloat(i), width: widthAndHeight, height: widthAndHeight*CGFloat(i))
+        var i = 1
+        for boatPosition in positionArray {
+            let frame = calcPositionByTileSize(boatPosition: boatPosition)
             let boat = UIView(frame: frame)
             boat.backgroundColor = UIColor.green
             boat.layer.borderWidth = 2
             boat.layer.borderColor = UIColor.white.cgColor
-            boat.tag = i-1
+            boat.tag = i
             let tapRecogn = UITapGestureRecognizer()
             tapRecogn.addTarget(self, action: #selector(tapToRotate))
             boat.addGestureRecognizer(tapRecogn)
             let panGesture = UILongPressGestureRecognizer(target: self, action: #selector(handlePan(recognizer:)))
             panGesture.minimumPressDuration = 0.5
             boat.addGestureRecognizer(panGesture)
-            
             boatArray.append(boat)
             battleView.addSubview(boat)
-            x += widthAndHeight
+            i += 1
+            print("column = \(boatPosition.column), row = \(boatPosition.row), width = \(boatPosition.width), height = \(boatPosition.height)")
+            
         }
     }
     
@@ -101,23 +101,22 @@ class MoveShipsViewController: UIViewController {
             self.newCord.y = calcPosition(position: y)
         }
         recognizer.view?.frame.origin = CGPoint(x: self.newCord.x, y: self.newCord.y)
-        print("y = \(self.newCord.y) x = \(self.newCord.x)")
-        calcRowColumnWidthHeight(boat: recognizer.view!)
+        //print("y = \(self.newCord.y) x = \(self.newCord.x)")
+        //calcRowColumnWidthHeight(boat: recognizer.view!)
     }
     
     func calcPosition(position: CGFloat) -> CGFloat {
-        let widthAndHeight = battleView.frame.width/10
-        let newPosition = CGFloat(Int(position/widthAndHeight+0.5))*widthAndHeight
+        let newPosition = CGFloat(Int(position/tileWidthAndHeight+0.5))*tileWidthAndHeight
         return newPosition
     }
     
     func calcRowColumnWidthHeight(boat: UIView)-> BoatPositions{
-        let tileSize = battleView.frame.width/10
-        let row = boat.frame.origin.y/tileSize+1
-        let column = boat.frame.origin.x/tileSize+1
-        let width = boat.frame.width/tileSize
-        let height = boat.frame.height/tileSize
+        let row = boat.frame.origin.y/tileWidthAndHeight + 0.5
+        let column = boat.frame.origin.x/tileWidthAndHeight + 0.5
+        let width = boat.frame.width/tileWidthAndHeight + 0.5
+        let height = boat.frame.height/tileWidthAndHeight + 0.5
         print("column = \(column) row = \(row) height = \(height) width = \(width)")
+        print("x = \(boat.frame.origin.x) y = \(boat.frame.origin.y) height = \(boat.frame.height) width = \(boat.frame.width)")
         return BoatPositions(row: row, column: column, height: height, width: width)
         
     }
@@ -128,9 +127,7 @@ class MoveShipsViewController: UIViewController {
     
     func saveUserDefaults(){
         boatsPosition()
-        let encodeData = NSKeyedArchiver.archivedData(withRootObject: positionArray)
-        let defaults = UserDefaults.standard
-        defaults.set(encodeData, forKey: "boatsPosition")
+        BoatPositions.saveToUserDefaults(boats: positionArray)
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -141,16 +138,18 @@ class MoveShipsViewController: UIViewController {
         }
         positionArray = array
     }
-    /*
-    func calcPositionByTileSize(){
-        let tileSize = battleView.frame.width/10
-        let y = row*(tileSize-1)
-        let x = column*(tileSize-1)
-        let width = width*tileSize
-        let height = height*tileSize
-    }*/
-    //Spara ner positioner och vilka skepp
-    //Gör om positioner till vilka rad och kolumn skeppen står på och bredd och höjd i rutor
+    
+     func calcPositionByTileSize(boatPosition: BoatPositions)-> CGRect{
+        let x = boatPosition.column*tileWidthAndHeight
+        let y = boatPosition.row*tileWidthAndHeight
+        let height = boatPosition.height*tileWidthAndHeight
+        let width = boatPosition.width*tileWidthAndHeight
+        let frame = CGRect(x: x, y: y, width: width, height: height)
+        return frame
+    }
+    
+    //Spara ner positioner och vilka skepp KLAR
+    //Gör om positioner till vilka rad och kolumn skeppen står på och bredd och höjd i rutor KLAR
     //Kolla om skeppen ligger på varandra?
     //firebase. Skicka information om var skeppen är. vilka som är träffade
     //ska inte kunna skjuta på samma ställe två gånger.
