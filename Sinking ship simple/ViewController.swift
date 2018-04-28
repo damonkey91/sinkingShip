@@ -7,15 +7,20 @@
 //
 
 import UIKit
+import Firebase
 
 class ViewController: UIViewController {
     var upperButtonArray: [UIButton] = []
     var lowerButtonArray: [UIButton] = []
     @IBOutlet weak var upperView: UIView!
     @IBOutlet weak var lowerView: UIView!
-    var yourTurn: Bool!
-    var whosTurn: Int!
-    
+    var yourTurn = false
+    var firstTurn: Int = Int(arc4random_uniform(1000))
+    var informationArray: [Information] = []
+    let userId = Int(arc4random_uniform(5000))
+    var opponentsBoatPositionArray: [BoatPositions] = []
+    var myBoatPositionsAsTileNrs: [[Int]] = []
+    var opponentsBoatPositionsAsTileNrs: [[Int]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +28,14 @@ class ViewController: UIViewController {
         createButtons(view: upperView, addTarget: false)
         createButtons(view: lowerView, addTarget: true)
         createShips()
-        whosTurn = Int(arc4random_uniform(100))
+        setupDatabase()
+        sendGameInfoToDatabase()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        print("Gonna delete data dissaper")
+        let database = Database.database().reference()
+        database.removeValue()
     }
     
     func createButtons(view: UIView, addTarget: Bool) {
@@ -63,11 +75,131 @@ class ViewController: UIViewController {
         }
     }
     
+    func setupDatabase() {
+        var database = Database.database().reference().child("chooseTurn")
+        database.observe(.childAdded) { (snapshot) in
+            let snapshotValue = snapshot.value as! [Any]
+            print(snapshot)
+            let gameInformation = Information()
+            let first = snapshotValue[0] as! [String: String]
+            let second = snapshotValue[1] as! [String: [[String: Int]]]
+            let boats = second["BoatPosition"]!
+            gameInformation.number = Int(first["FirstTurn"]!)!
+            gameInformation.sender = Int(first["Sender"]!)!
+            if gameInformation.sender != self.userId{
+                for boatpos in boats {
+                    let boatPosition = BoatPositions(
+                        row: CGFloat(boatpos["row"]!),
+                        column: CGFloat(boatpos["column"]!),
+                        height: CGFloat(boatpos["height"]!),
+                        width: CGFloat(boatpos["width"]!))
+                    self.opponentsBoatPositionArray.append(boatPosition)
+                }
+            }
+            self.informationArray.append(gameInformation)
+            self.startFirstTurn()
+        }
+        
+        database = Database.database().reference().child("SinkingShip")
+        database.observe(.childChanged) { (snapshot) in
+            let snapshotValue = snapshot.value as! [String: Int]
+            let sender = snapshotValue["Sender"]
+            if sender != self.userId {
+                let shot = snapshotValue["Shot"]!
+                let hitNr = snapshotValue["Hit"]!
+                let hit = hitNr == 1
+                self.yourTurn = !hit
+                self.shotUpperView(shot: shot, hit: hit)
+                //TODO: check if hit and its your turn if miss
+            }
+            //send sender, firstTurn number in one child.
+            //send sender, yourTurn (true or false), shot (button tag), hit (true or false)
+            
+            //send boatpositions and firstTurn number in one child. save his boat positions
+            //send hisTurn bool and the hits you made
+            
+            //sender, randomNr, yourTurn (true or false), shot (button tag), hit (true or false),
+            //sender, randomNr, yourTurn(true or false), my boats, his boats
+        }
+        database.observe(.childAdded) { (snapshot) in
+            let snapshotValue = snapshot.value as! [String: Int]
+            let sender = snapshotValue["Sender"]
+            if sender != self.userId {
+                let shot = snapshotValue["Shot"]!
+                let hitNr = snapshotValue["Hit"]!
+                let hit = hitNr == 1
+                self.yourTurn = !hit
+                self.shotUpperView(shot: shot, hit: hit)
+                //TODO: check if hit and its your turn if miss
+            }
+        }
+
+    }
+    
+    func shotUpperView(shot: Int, hit: Bool) {
+        let button = upperView.viewWithTag(shot) as! UIButton
+        if hit {
+            button.backgroundColor = UIColor.red
+        } else {
+            button.backgroundColor = UIColor.yellow
+        }
+    }
+    
+    func sendGameInfoToDatabase(){
+        let database = Database.database().reference().child("chooseTurn")
+        let sendDataArray = [["Sender": String(userId), "FirstTurn": String(firstTurn)], ["BoatPosition": databaseFriendlyPositions()]]
+        //database.child("FirstGameInfo").setValue(sendDataArray)
+        database.childByAutoId().setValue(sendDataArray) {
+            (error, reference) in
+            if error != nil {
+                print(error!)
+            } else {
+                print("Gamedata sent succesfully!")
+            }
+        //sender, boatposition, firstNr
+        }
+    }
+    
+    func sendToDatabase(tag: Int, hit: Int){
+        let database = Database.database().reference().child("SinkingShip")
+        let dictionary = ["Sender": userId, "Shot": tag, "Hit": hit]
+        database.child("ShotsAndHits").setValue(dictionary) {
+            (error, reference) in
+            if error != nil {
+                print(error!)
+            } else {
+                print("Gamedata sent succesfully!")
+            }
+        }
+    }
+    
     @objc func clickedButton(sender: UIButton!){
         print("button clicked \(sender.tag)")
         if yourTurn {
-            
+            sender.isEnabled = false
+            let hit = checkIfHit(position: sender.tag, tileArray: opponentsBoatPositionsAsTileNrs)
+            var hitNr = 0
+            if hit {
+                sender.backgroundColor = UIColor.red
+                hitNr = 1
+            } else {
+                sender.backgroundColor = UIColor.yellow
+            }
+            sendToDatabase(tag: sender.tag, hit: hitNr)
         }
+    }
+    
+    func checkIfHit(position: Int, tileArray: [[Int]]) -> Bool {
+        for boat in tileArray {
+            for tileNr in boat {
+                if tileNr == position {
+                    yourTurn = true
+                    return true
+                }
+            }
+        }
+        yourTurn = false
+        return false
     }
     
     func calcPositionByTileSize(boatPosition: BoatPositions)-> CGRect{
@@ -80,12 +212,78 @@ class ViewController: UIViewController {
         let frame = CGRect(x: x, y: y, width: width, height: height)
         return frame
     }
-    //hämta userdefaults och kolla om den är nil är den nil så skapa up standard skepp och spara ner i userdefaults. Dessa hämtar vi sedan i både moveViewcontroller och gameviewcontroller
-    //hämta och spara userdefaults ska vara en fil eftersom det görs i ala vyer
-    //beräkningar bör också vara i en fil positionsfilen? för det görs i två vyer Bör retunera cgrects
+    
+    func startFirstTurn(){
+        var myNr: Int = -1
+        var hisNr: Int = -1
+        print(userId)
+        print(informationArray)
+        if informationArray.count < 2{
+            print("Array have less then 2 values")
+        } else {
+            for chooseTurn in informationArray {
+                if chooseTurn.sender == userId {
+                  myNr = chooseTurn.number
+                }else {
+                  hisNr = chooseTurn.number
+                }
+            }
+            print("MyNr = \(myNr) hisNr = \(hisNr)")
+            if hisNr > myNr {
+                yourTurn = false
+                print("It is opponents turn")
+            } else {
+                yourTurn = true
+                print("It is your turn")
+            }
+            myBoatPositionsAsTileNrs = calculateBoatsPositionsAsTileNr(boats: BoatPositions.getFromUserDefaults())
+            opponentsBoatPositionsAsTileNrs
+                = calculateBoatsPositionsAsTileNr(boats: opponentsBoatPositionArray)
+        }
+    }
+    
+    func databaseFriendlyPositions() -> [[String: Int]] {
+        var arrayDictionaryPositions: [[String: Int]] = []
+        let positionArray = BoatPositions.getFromUserDefaults()
+        for boatPosition in positionArray {
+            arrayDictionaryPositions.append([
+                "row": Int(boatPosition.row),
+                "column": Int(boatPosition.column),
+                "height": Int(boatPosition.height),
+                "width": Int(boatPosition.width)])
+        }
+        return arrayDictionaryPositions
+    }
+    
+    func calculateBoatsPositionsAsTileNr(boats: [BoatPositions]) -> [[Int]]{
+        var boatTileNrArray: [[Int]] = []
+        for boat in boats {
+            let row = Int(boat.row * 10)
+            let column = Int(boat.column + 1)
+            var innerArray = [row + column]
+            var addNr = 1
+            var forNr = Int(boat.width)
+            if boat.width < boat.height {
+                addNr = 10
+                forNr = Int(boat.height)
+            }
+            for i in 1...forNr{
+                let nr = row + column + i * addNr
+                innerArray.append(nr)
+                print("TileNr = \(nr)")
+            }
+            boatTileNrArray.append(innerArray)
+        }
+        return boatTileNrArray
+    }
+    
+    
     //Den övre vyn ska dina skepp ritas ut och när ett blir träffat så ska det märkas upp
-    // Den undre vyn ska du kunna skjuta på när det är din tur Skutten ska märkas ut och du får inte skjuta på samma ställe.
+    //Den undre vyn ska du kunna skjuta på när det är din tur Skotten ska märkas ut och du får inte skjuta på samma ställe.
     //När ett helt skepp blivit nerskjutet ska det bli synligt
-    //Den övre vyn hade inte behövts byggas i knappar då den ändå inte ska ha någon action kopplad till sig
+    //Få det att synas när ditt skepp träffas, nu färgas bara bakgrunden under ditt skepp
+    //Radera data när en match är över ur databasen
+    //Veta när man sänkt ett helt skepp
+    //Veta när man har sänkt alla skepp
 }
 

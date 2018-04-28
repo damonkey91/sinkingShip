@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7221650020923A7900CEC669 /* Information.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722164FF20923A7900CEC669 /* Information.swift */; };
+		7244CFB920908C9100957829 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7244CFB820908C9100957829 /* GoogleService-Info.plist */; };
 		72AB25A02087C4B9001ACEAE /* MoveShipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AB259F2087C4B9001ACEAE /* MoveShipsViewController.swift */; };
 		72AB25A2208A40C6001ACEAE /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AB25A1208A40C6001ACEAE /* FirstViewController.swift */; };
 		72AB25A6208A4F23001ACEAE /* BoatPositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72AB25A5208A4F23001ACEAE /* BoatPositions.swift */; };
@@ -15,9 +17,14 @@
 		72FC04192087AA4800EFEA55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72FC04172087AA4800EFEA55 /* Main.storyboard */; };
 		72FC041B2087AA4800EFEA55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72FC041A2087AA4800EFEA55 /* Assets.xcassets */; };
 		72FC041E2087AA4800EFEA55 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72FC041C2087AA4800EFEA55 /* LaunchScreen.storyboard */; };
+		D3B1979890A74284A55A2B3B /* Pods_Sinking_ship_simple.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 332BCA49CFE121D8CF34DB2A /* Pods_Sinking_ship_simple.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		332BCA49CFE121D8CF34DB2A /* Pods_Sinking_ship_simple.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sinking_ship_simple.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		455CAC1718769AE143A61522 /* Pods-Sinking ship simple.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sinking ship simple.release.xcconfig"; path = "Pods/Target Support Files/Pods-Sinking ship simple/Pods-Sinking ship simple.release.xcconfig"; sourceTree = "<group>"; };
+		722164FF20923A7900CEC669 /* Information.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Information.swift; sourceTree = "<group>"; };
+		7244CFB820908C9100957829 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		72AB259F2087C4B9001ACEAE /* MoveShipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveShipsViewController.swift; sourceTree = "<group>"; };
 		72AB25A1208A40C6001ACEAE /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
 		72AB25A5208A4F23001ACEAE /* BoatPositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoatPositions.swift; sourceTree = "<group>"; };
@@ -28,6 +35,7 @@
 		72FC041A2087AA4800EFEA55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72FC041D2087AA4800EFEA55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		72FC041F2087AA4800EFEA55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F803083A7A037C8053C49930 /* Pods-Sinking ship simple.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sinking ship simple.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Sinking ship simple/Pods-Sinking ship simple.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,17 +43,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3B1979890A74284A55A2B3B /* Pods_Sinking_ship_simple.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1240F20F871C21555CF0180A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F803083A7A037C8053C49930 /* Pods-Sinking ship simple.debug.xcconfig */,
+				455CAC1718769AE143A61522 /* Pods-Sinking ship simple.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		72FC04072087AA4800EFEA55 = {
 			isa = PBXGroup;
 			children = (
 				72FC04122087AA4800EFEA55 /* Sinking ship simple */,
 				72FC04112087AA4800EFEA55 /* Products */,
+				1240F20F871C21555CF0180A /* Pods */,
+				EB647B33D8B09E918D109D85 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -63,14 +83,24 @@
 				72FC04132087AA4800EFEA55 /* AppDelegate.swift */,
 				72AB25A5208A4F23001ACEAE /* BoatPositions.swift */,
 				72FC04152087AA4800EFEA55 /* ViewController.swift */,
+				722164FF20923A7900CEC669 /* Information.swift */,
 				72AB25A1208A40C6001ACEAE /* FirstViewController.swift */,
 				72FC04172087AA4800EFEA55 /* Main.storyboard */,
 				72AB259F2087C4B9001ACEAE /* MoveShipsViewController.swift */,
 				72FC041A2087AA4800EFEA55 /* Assets.xcassets */,
 				72FC041C2087AA4800EFEA55 /* LaunchScreen.storyboard */,
+				7244CFB820908C9100957829 /* GoogleService-Info.plist */,
 				72FC041F2087AA4800EFEA55 /* Info.plist */,
 			);
 			path = "Sinking ship simple";
+			sourceTree = "<group>";
+		};
+		EB647B33D8B09E918D109D85 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				332BCA49CFE121D8CF34DB2A /* Pods_Sinking_ship_simple.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -80,9 +110,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72FC04222087AA4800EFEA55 /* Build configuration list for PBXNativeTarget "Sinking ship simple" */;
 			buildPhases = (
+				B9A4E9E8E6C8D41191BE48CF /* [CP] Check Pods Manifest.lock */,
 				72FC040C2087AA4800EFEA55 /* Sources */,
 				72FC040D2087AA4800EFEA55 /* Frameworks */,
 				72FC040E2087AA4800EFEA55 /* Resources */,
+				B32AB9790ECF0F7032A63602 /* [CP] Embed Pods Frameworks */,
+				0AE5798E351F63AD4C88A141 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -133,12 +166,73 @@
 			buildActionMask = 2147483647;
 			files = (
 				72FC041E2087AA4800EFEA55 /* LaunchScreen.storyboard in Resources */,
+				7244CFB920908C9100957829 /* GoogleService-Info.plist in Resources */,
 				72FC041B2087AA4800EFEA55 /* Assets.xcassets in Resources */,
 				72FC04192087AA4800EFEA55 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0AE5798E351F63AD4C88A141 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sinking ship simple/Pods-Sinking ship simple-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B32AB9790ECF0F7032A63602 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Sinking ship simple/Pods-Sinking ship simple-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Sinking ship simple/Pods-Sinking ship simple-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B9A4E9E8E6C8D41191BE48CF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Sinking ship simple-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		72FC040C2087AA4800EFEA55 /* Sources */ = {
@@ -150,6 +244,7 @@
 				72FC04162087AA4800EFEA55 /* ViewController.swift in Sources */,
 				72FC04142087AA4800EFEA55 /* AppDelegate.swift in Sources */,
 				72AB25A2208A40C6001ACEAE /* FirstViewController.swift in Sources */,
+				7221650020923A7900CEC669 /* Information.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +379,7 @@
 		};
 		72FC04232087AA4800EFEA55 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F803083A7A037C8053C49930 /* Pods-Sinking ship simple.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -299,6 +395,7 @@
 		};
 		72FC04242087AA4800EFEA55 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 455CAC1718769AE143A61522 /* Pods-Sinking ship simple.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

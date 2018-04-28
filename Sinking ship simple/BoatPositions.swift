@@ -46,10 +46,10 @@ class BoatPositions: NSObject, NSCoding {
     static func getFromUserDefaults()->[BoatPositions]{
         
         var data = UserDefaults.standard.data(forKey: BOAT_POSITION_KEY)
-        if data == nil {
+        //if data == nil {
             saveToUserDefaults(boats: createStandardBoatsPosition())
             data = UserDefaults.standard.data(forKey: BOAT_POSITION_KEY)
-        }
+        //}
         return NSKeyedUnarchiver.unarchiveObject(with: data!) as! [BoatPositions]
     }
     
