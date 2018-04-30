@@ -1,4 +1,5 @@
 PODS:
+  - DynamicBlurView (2.0.2)
   - Firebase (4.10.1):
     - Firebase/Core (= 4.10.1)
   - Firebase/Auth (4.10.1):
@@ -44,13 +45,17 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - PopupDialog (0.7.1):
+    - DynamicBlurView (~> 2.0)
 
 DEPENDENCIES:
   - Firebase
   - Firebase/Auth
   - Firebase/Database
+  - PopupDialog (= 0.7.1)
 
 SPEC CHECKSUMS:
+  DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
   Firebase: 92c6ba593e32db0defde464a9adc981d5cb49f97
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
   FirebaseAuth: d040bb7a9db6dfc29d0e7ec82d48be51352b2581
@@ -61,7 +66,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  PopupDialog: 39598b7d41719f5c025b4b70e62728bae7734fef
 
-PODFILE CHECKSUM: fb415059e74f6e9b86fcc40b896c2f9046363ba4
+PODFILE CHECKSUM: 0ac80e29ae001a1424dc64705c7c4b74e4c76605
 
 COCOAPODS: 1.4.0

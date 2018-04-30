@@ -9,4 +9,5 @@ target 'Sinking ship simple' do
 pod 'Firebase'
 pod 'Firebase/Auth'
 pod 'Firebase/Database'
+pod 'PopupDialog', '0.7.1'
 end

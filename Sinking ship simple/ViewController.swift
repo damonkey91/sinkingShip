@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import PopupDialog
 
 class ViewController: UIViewController {
     var upperButtonArray: [UIButton] = []
@@ -111,9 +112,17 @@ class ViewController: UIViewController {
             if sender != self.userId {
                 let shot = snapshotValue["Shot"]!
                 let hitNr = snapshotValue["Hit"]!
+                let youLost = snapshotValue["YouLost"]!
                 let hit = hitNr == 1
                 self.yourTurn = !hit
                 self.shotUpperView(shot: shot, hit: hit)
+                if self.yourTurn {
+                    self.showToast(text: "Your turn")
+                }
+                if youLost == 1 {
+                    print("You Lost")
+                    self.showPopUp(won: false)
+                }
                 //TODO: check if hit and its your turn if miss
             }
             //send sender, firstTurn number in one child.
@@ -131,15 +140,11 @@ class ViewController: UIViewController {
             if sender != self.userId {
                 let shot = snapshotValue["Shot"]!
                 let hitNr = snapshotValue["Hit"]!
-                let youLost = snapshotValue["YouLost"]!
                 let hit = hitNr == 1
                 self.yourTurn = !hit
                 self.shotUpperView(shot: shot, hit: hit)
                 if self.yourTurn {
                     self.showToast(text: "Your turn")
-                }
-                if youLost == 1 {
-                    print("You Lost")
                 }
             }
         }
@@ -224,6 +229,9 @@ class ViewController: UIViewController {
                 sender.backgroundColor = UIColor.yellow
             }
             sendToDatabase(tag: sender.tag, hit: hitNr, youLost: youWon)
+            if youWon == 1 {
+                showPopUp(won: true)
+            }
         }
     }
     
@@ -381,6 +389,21 @@ class ViewController: UIViewController {
         }
         toastLabel.layer.zPosition = -1
     }
+    
+    func showPopUp(won: Bool){
+        var text = "You lost! :("
+        if won {
+            text = "You won!!!"
+        }
+        
+        let popup = PopupDialog(title: text, message: nil)
+        let button = CancelButton(title: "Main menu") {
+            self.endGame()
+        }
+        popup.addButton(button)
+        self.present(popup, animated: true, completion: nil)
+    }
+    
     //Den övre vyn ska dina skepp ritas ut och när ett blir träffat så ska det märkas upp
     //Den undre vyn ska du kunna skjuta på när det är din tur Skotten ska märkas ut och du får inte skjuta på samma ställe.
     //När ett helt skepp blivit nerskjutet ska det bli synligt
