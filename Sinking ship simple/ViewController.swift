@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     var lowerButtonArray: [UIButton] = []
     @IBOutlet weak var upperView: UIView!
     @IBOutlet weak var lowerView: UIView!
+    @IBOutlet weak var toastLabel: UILabel!
     var yourTurn = false
     var firstTurn: Int = Int(arc4random_uniform(1000))
     var informationArray: [Information] = []
@@ -21,10 +22,13 @@ class ViewController: UIViewController {
     var opponentsBoatPositionArray: [BoatPositions] = []
     var myBoatPositionsAsTileNrs: [[Int]] = []
     var opponentsBoatPositionsAsTileNrs: [[Int]] = []
+    var opponentsHitsLeftArray: [Int] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        toastLabel.layer.zPosition = -1
+        toastLabel.alpha = 0
         createButtons(view: upperView, addTarget: false)
         createButtons(view: lowerView, addTarget: true)
         createShips()
@@ -127,10 +131,16 @@ class ViewController: UIViewController {
             if sender != self.userId {
                 let shot = snapshotValue["Shot"]!
                 let hitNr = snapshotValue["Hit"]!
+                let youLost = snapshotValue["YouLost"]!
                 let hit = hitNr == 1
                 self.yourTurn = !hit
                 self.shotUpperView(shot: shot, hit: hit)
-                //TODO: check if hit and its your turn if miss
+                if self.yourTurn {
+                    self.showToast(text: "Your turn")
+                }
+                if youLost == 1 {
+                    print("You Lost")
+                }
             }
         }
 
@@ -138,11 +148,33 @@ class ViewController: UIViewController {
     
     func shotUpperView(shot: Int, hit: Bool) {
         let button = upperView.viewWithTag(shot) as! UIButton
+        print(button.frame.origin)
         if hit {
+            /*let x = button.frame.origin.x
+            let y = button.frame.origin.y
+            let height = button.frame.width / 2
+            let width = button.frame.width / 2
+            let image = UIImageView(image: UIImage(named: "explosion3"))
+            image.frame = CGRect(x: x, y: y, width: width, height: height)
+            image.center = CGPoint(x: x + width, y: y + height)
+            upperView.addSubview(image)
+ */
+            createShotImage(addToView: upperView, button: button)
             button.backgroundColor = UIColor.red
         } else {
             button.backgroundColor = UIColor.yellow
         }
+    }
+    
+    func createShotImage(addToView: UIView, button: UIButton){
+        let x = button.frame.origin.x
+        let y = button.frame.origin.y
+        let height = button.frame.width / 2
+        let width = button.frame.width / 2
+        let image = UIImageView(image: UIImage(named: "explosion3"))
+        image.frame = CGRect(x: x, y: y, width: width, height: height)
+        image.center = CGPoint(x: x + width, y: y + height)
+        addToView.addSubview(image)
     }
     
     func sendGameInfoToDatabase(){
@@ -160,9 +192,9 @@ class ViewController: UIViewController {
         }
     }
     
-    func sendToDatabase(tag: Int, hit: Int){
+    func sendToDatabase(tag: Int, hit: Int, youLost: Int){
         let database = Database.database().reference().child("SinkingShip")
-        let dictionary = ["Sender": userId, "Shot": tag, "Hit": hit]
+        let dictionary = ["Sender": userId, "Shot": tag, "Hit": hit, "YouLost": youLost]
         database.child("ShotsAndHits").setValue(dictionary) {
             (error, reference) in
             if error != nil {
@@ -175,17 +207,23 @@ class ViewController: UIViewController {
     
     @objc func clickedButton(sender: UIButton!){
         print("button clicked \(sender.tag)")
+        
         if yourTurn {
             sender.isEnabled = false
+            var youWon = 0
             let hit = checkIfHit(position: sender.tag, tileArray: opponentsBoatPositionsAsTileNrs)
             var hitNr = 0
             if hit {
                 sender.backgroundColor = UIColor.red
                 hitNr = 1
+                checkIfShipSunken(shotShips: subtractIfHitOpponent(tileNr: sender.tag))
+                if checkIfWon() {
+                    youWon = 1
+                }
             } else {
                 sender.backgroundColor = UIColor.yellow
             }
-            sendToDatabase(tag: sender.tag, hit: hitNr)
+            sendToDatabase(tag: sender.tag, hit: hitNr, youLost: youWon)
         }
     }
     
@@ -199,6 +237,51 @@ class ViewController: UIViewController {
             }
         }
         yourTurn = false
+        showToast(text: "Opponents turn")
+        return false
+    }
+    
+    func subtractIfHitOpponent(tileNr: Int)-> [Int]{
+        var shotShips: [Int] = []
+        for i in 0..<opponentsBoatPositionsAsTileNrs.count {
+            let boat = opponentsBoatPositionsAsTileNrs[i]
+            for j in 0..<boat.count {
+                if boat[j] == tileNr {
+                    opponentsHitsLeftArray[i] = opponentsHitsLeftArray[i] - 1
+                    shotShips.append(i)
+                }
+            }
+        }
+        return shotShips
+    }
+    
+    func checkIfShipSunken(shotShips: [Int]){
+        for index in shotShips{
+            if opponentsHitsLeftArray[index] == 0 {
+                let boatPos = opponentsBoatPositionArray[index]
+                let boat = UIView(frame: calcPositionByTileSize(boatPosition: boatPos))
+                boat.backgroundColor = UIColor.green
+                lowerView.addSubview(boat)
+                let boatTiles = opponentsBoatPositionsAsTileNrs[index]
+                for tile in boatTiles {
+                    let button = lowerView.viewWithTag(tile) as! UIButton
+                    createShotImage(addToView: lowerView, button: button)
+                }
+            }
+        }
+    }
+    
+    func checkIfWon()-> Bool{
+        var count = 0
+        for i in opponentsHitsLeftArray{
+            if i == 0 {
+                count += 1
+            }
+        }
+        if count == 5 {
+            print("You won!")
+            return true
+        }
         return false
     }
     
@@ -232,9 +315,11 @@ class ViewController: UIViewController {
             if hisNr > myNr {
                 yourTurn = false
                 print("It is opponents turn")
+                showToast(text: "Opponents turn")
             } else {
                 yourTurn = true
                 print("It is your turn")
+                showToast(text: "Your turn")
             }
             myBoatPositionsAsTileNrs = calculateBoatsPositionsAsTileNr(boats: BoatPositions.getFromUserDefaults())
             opponentsBoatPositionsAsTileNrs
@@ -256,6 +341,7 @@ class ViewController: UIViewController {
     }
     
     func calculateBoatsPositionsAsTileNr(boats: [BoatPositions]) -> [[Int]]{
+        var array: [Int] = []
         var boatTileNrArray: [[Int]] = []
         for boat in boats {
             let row = Int(boat.row * 10)
@@ -267,17 +353,34 @@ class ViewController: UIViewController {
                 addNr = 10
                 forNr = Int(boat.height)
             }
-            for i in 1...forNr{
+            array.append(forNr)
+            for i in 1..<forNr{
                 let nr = row + column + i * addNr
                 innerArray.append(nr)
                 print("TileNr = \(nr)")
             }
             boatTileNrArray.append(innerArray)
         }
+        opponentsHitsLeftArray = array
         return boatTileNrArray
     }
     
+    func endGame(){
+        self.dismiss(animated: true, completion: nil)
+    }
     
+    func showToast(text: String){
+        toastLabel.layer.zPosition = 10
+        toastLabel.text = text
+        UIView.animate(withDuration: 1, animations: {
+            self.toastLabel.alpha = 1
+        }) { (complete) in
+            UIView.animate(withDuration: 1, animations: {
+                self.toastLabel.alpha = 0
+            })
+        }
+        toastLabel.layer.zPosition = -1
+    }
     //Den övre vyn ska dina skepp ritas ut och när ett blir träffat så ska det märkas upp
     //Den undre vyn ska du kunna skjuta på när det är din tur Skotten ska märkas ut och du får inte skjuta på samma ställe.
     //När ett helt skepp blivit nerskjutet ska det bli synligt

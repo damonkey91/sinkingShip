@@ -64,6 +64,12 @@
                                 <rect key="frame" x="16" y="20" width="343" height="303.5"/>
                                 <color key="backgroundColor" red="0.87442332509999998" green="0.87457031009999997" blue="0.87440401320000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y2G-iW-oyl">
+                                <rect key="frame" x="166" y="323" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d37-Vd-Coy">
                                 <rect key="frame" x="16" y="343.5" width="343" height="303.5"/>
                                 <color key="backgroundColor" red="0.93245536090000003" green="0.71316313740000004" blue="0.42413657900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -71,6 +77,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="y2G-iW-oyl" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="4h2-Zx-4tP"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="d37-Vd-Coy" secondAttribute="bottom" constant="20" id="EAs-7c-FQF"/>
                             <constraint firstItem="zaH-qT-4vm" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Gqx-k6-f2C"/>
                             <constraint firstItem="zaH-qT-4vm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="IZh-s3-Kj9"/>
@@ -80,11 +87,13 @@
                             <constraint firstItem="d37-Vd-Coy" firstAttribute="top" secondItem="zaH-qT-4vm" secondAttribute="bottom" constant="20" id="en5-9u-lAN"/>
                             <constraint firstItem="d37-Vd-Coy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="oJp-Gm-K7a"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="d37-Vd-Coy" secondAttribute="trailing" constant="16" id="xvq-Ak-1Lu"/>
+                            <constraint firstItem="y2G-iW-oyl" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="yR9-od-mdV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="lowerView" destination="d37-Vd-Coy" id="whS-3b-DVO"/>
+                        <outlet property="toastLabel" destination="y2G-iW-oyl" id="MNe-fz-8Te"/>
                         <outlet property="upperView" destination="zaH-qT-4vm" id="rcv-5i-eQb"/>
                     </connections>
                 </viewController>
@@ -108,7 +117,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FMb-UK-fa1">
-                                <rect key="frame" x="153" y="563" width="46" height="30"/>
+                                <rect key="frame" x="134.5" y="563" width="106" height="72"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="50"/>
                                 <state key="normal" title="Save"/>
                                 <connections>
