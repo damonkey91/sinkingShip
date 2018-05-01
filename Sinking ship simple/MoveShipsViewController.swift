@@ -101,8 +101,6 @@ class MoveShipsViewController: UIViewController {
             self.newCord.y = calcPosition(position: y)
         }
         recognizer.view?.frame.origin = CGPoint(x: self.newCord.x, y: self.newCord.y)
-        //print("y = \(self.newCord.y) x = \(self.newCord.x)")
-        //calcRowColumnWidthHeight(boat: recognizer.view!)
     }
     
     func calcPosition(position: CGFloat) -> CGFloat {
@@ -147,10 +145,4 @@ class MoveShipsViewController: UIViewController {
         let frame = CGRect(x: x, y: y, width: width, height: height)
         return frame
     }
-    
-    //Spara ner positioner och vilka skepp KLAR
-    //Gör om positioner till vilka rad och kolumn skeppen står på och bredd och höjd i rutor KLAR
-    //Kolla om skeppen ligger på varandra?
-    //firebase. Skicka information om var skeppen är. vilka som är träffade
-    //ska inte kunna skjuta på samma ställe två gånger.
 }

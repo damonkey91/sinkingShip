@@ -11,8 +11,6 @@ import Firebase
 import PopupDialog
 
 class ViewController: UIViewController {
-    var upperButtonArray: [UIButton] = []
-    var lowerButtonArray: [UIButton] = []
     @IBOutlet weak var upperView: UIView!
     @IBOutlet weak var lowerView: UIView!
     @IBOutlet weak var toastLabel: UILabel!
@@ -27,7 +25,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         toastLabel.layer.zPosition = -1
         toastLabel.alpha = 0
         createButtons(view: upperView, addTarget: false)
@@ -123,16 +120,7 @@ class ViewController: UIViewController {
                     print("You Lost")
                     self.showPopUp(won: false)
                 }
-                //TODO: check if hit and its your turn if miss
             }
-            //send sender, firstTurn number in one child.
-            //send sender, yourTurn (true or false), shot (button tag), hit (true or false)
-            
-            //send boatpositions and firstTurn number in one child. save his boat positions
-            //send hisTurn bool and the hits you made
-            
-            //sender, randomNr, yourTurn (true or false), shot (button tag), hit (true or false),
-            //sender, randomNr, yourTurn(true or false), my boats, his boats
         }
         database.observe(.childAdded) { (snapshot) in
             let snapshotValue = snapshot.value as! [String: Int]
@@ -155,15 +143,6 @@ class ViewController: UIViewController {
         let button = upperView.viewWithTag(shot) as! UIButton
         print(button.frame.origin)
         if hit {
-            /*let x = button.frame.origin.x
-            let y = button.frame.origin.y
-            let height = button.frame.width / 2
-            let width = button.frame.width / 2
-            let image = UIImageView(image: UIImage(named: "explosion3"))
-            image.frame = CGRect(x: x, y: y, width: width, height: height)
-            image.center = CGPoint(x: x + width, y: y + height)
-            upperView.addSubview(image)
- */
             createShotImage(addToView: upperView, button: button)
             button.backgroundColor = UIColor.red
         } else {
@@ -185,7 +164,6 @@ class ViewController: UIViewController {
     func sendGameInfoToDatabase(){
         let database = Database.database().reference().child("chooseTurn")
         let sendDataArray = [["Sender": String(userId), "FirstTurn": String(firstTurn)], ["BoatPosition": databaseFriendlyPositions()]]
-        //database.child("FirstGameInfo").setValue(sendDataArray)
         database.childByAutoId().setValue(sendDataArray) {
             (error, reference) in
             if error != nil {
@@ -193,7 +171,6 @@ class ViewController: UIViewController {
             } else {
                 print("Gamedata sent succesfully!")
             }
-        //sender, boatposition, firstNr
         }
     }
     
@@ -403,13 +380,5 @@ class ViewController: UIViewController {
         popup.addButton(button)
         self.present(popup, animated: true, completion: nil)
     }
-    
-    //Den övre vyn ska dina skepp ritas ut och när ett blir träffat så ska det märkas upp
-    //Den undre vyn ska du kunna skjuta på när det är din tur Skotten ska märkas ut och du får inte skjuta på samma ställe.
-    //När ett helt skepp blivit nerskjutet ska det bli synligt
-    //Få det att synas när ditt skepp träffas, nu färgas bara bakgrunden under ditt skepp
-    //Radera data när en match är över ur databasen
-    //Veta när man sänkt ett helt skepp
-    //Veta när man har sänkt alla skepp
 }
 
