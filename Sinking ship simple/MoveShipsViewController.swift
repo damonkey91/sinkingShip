@@ -19,7 +19,9 @@ class MoveShipsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         positionArray = BoatPositions.getFromUserDefaults()
         tileWidthAndHeight = battleView.frame.width/10
         createBattlefield()

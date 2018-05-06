@@ -27,6 +27,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         toastLabel.layer.zPosition = -1
         toastLabel.alpha = 0
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         createButtons(view: upperView, addTarget: false)
         createButtons(view: lowerView, addTarget: true)
         createShips()
